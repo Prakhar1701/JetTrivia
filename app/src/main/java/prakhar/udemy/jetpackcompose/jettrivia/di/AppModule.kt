@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import prakhar.udemy.jetpackcompose.jettrivia.network.QuestionApi
+import prakhar.udemy.jetpackcompose.jettrivia.repository.QuestionRepository
 import prakhar.udemy.jetpackcompose.jettrivia.util.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,6 +14,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Singleton
+    @Provides
+    fun provideQuestionRepository(api: QuestionApi) = QuestionRepository(api)
+
     @Singleton
     @Provides
     fun provideQuestionApi(): QuestionApi {
