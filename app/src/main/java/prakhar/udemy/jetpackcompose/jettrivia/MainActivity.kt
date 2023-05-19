@@ -40,5 +40,12 @@ fun TriviaHome(viewModel: QuestionsViewModel = hiltViewModel()) {
 @Composable
 fun Questions(viewModel: QuestionsViewModel) {
     val questions = viewModel.data.value.data?.toMutableList()
-    Log.d("SIZE", "Questions: ${questions?.size}")
+    if (viewModel.data.value.loading == true) {
+        Log.d("LOADING", "Questions: Loading...")
+    } else {
+        Log.d("SIZE", "Questions: ${questions?.size}")
+        questions?.forEach { questionItem ->
+            Log.d("RESULT", "Question: ${questionItem.question}")
+        }
+    }
 }
