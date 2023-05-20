@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,12 +108,16 @@ fun QuestionDisplay(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
+
+            if (questionIndex.value >= 3) ShowProgress(score = questionIndex.value)
+
             viewModel.data.value.data?.let {
                 QuestionTracker(
                     counter = questionIndex.value,
                     it.size
                 )
             }
+
             DrawDottedLine(pathEffect)
             Column {
 
@@ -272,6 +278,9 @@ fun ShowProgress(score: Int = 12) {
             Color(0xFFBE6BE5)
         )
     )
+    val progressFactor by remember(score) {
+        mutableStateOf(score * 0.005f)
+    }
 
     Row(
         modifier = Modifier
@@ -301,7 +310,7 @@ fun ShowProgress(score: Int = 12) {
             contentPadding = PaddingValues(1.dp),
             onClick = {},
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(progressFactor)
                 .background(brush = gradient),
             enabled = false,
             elevation = null,
@@ -309,7 +318,16 @@ fun ShowProgress(score: Int = 12) {
                 containerColor = Color.Transparent, disabledContainerColor = Color.Transparent
             )
         ) {
-
+            Text(
+                text = (score * 10).toString(),
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(23.dp))
+                    .fillMaxHeight(0.87f)
+                    .fillMaxWidth()
+                    .padding(6.dp),
+                color = AppColors.mOffWhite,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
